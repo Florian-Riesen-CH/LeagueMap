@@ -6,7 +6,7 @@ from Object.Match import *
 
 API_KEYS = ['RGAPI-aa6932d1-9e5b-4af9-9b7c-cdbc5abbb1cb','RGAPI-a086aa60-b73e-4acb-9ded-c6c136700130','RGAPI-735b78eb-6be9-41fd-afe9-2bce951954e1']
 API_INDEX = 0
-API_JUMP = 10
+API_JUMP = 2
 def incrementApiIndex():
     global REQUEST_CPT
     global API_INDEX
@@ -65,20 +65,24 @@ def getMatchInfoByMatchId(puuid:str, matchId:int):
     return match
 
 def getMatchsInformation(summonerName, nbMatch):
-    nb=0
+    nbGetMatch = 0
     matchList: List[Match] = []
-    for i in range(0, nbMatch, API_JUMP):
-        incrementApiIndex()
-        myPuuid = findUuidBySummonerName(summonerName)
-        myLastMatch = getMatchHistoryByPuuid(myPuuid, nb, API_JUMP)
-        
+    i = 0
+    while i < nbMatch:
+        if i % API_JUMP == 0:
+            incrementApiIndex()
+            myPuuid = findUuidBySummonerName(summonerName)
+            myLastMatch = getMatchHistoryByPuuid(myPuuid, i, API_JUMP)
         for index, match in enumerate(myLastMatch):
-            print(f'{nb} - Request for match: {match} ({API_KEYS[API_INDEX]})')
-            match: Match = getMatchInfoByMatchId(myPuuid,match)
+            if nbGetMatch == nbMatch:
+                return matchList
+            print(f'{i} - Request for match: {match} ({API_KEYS[API_INDEX]})')
+            match = getMatchInfoByMatchId(myPuuid, match)
             matchList.append(match)
-            nb += 1
+            nbGetMatch += 1
+            i += 1 
+        
 
     
-    return matchList
 
 
