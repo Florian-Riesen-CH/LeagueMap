@@ -4,16 +4,17 @@ import json
 
 from Object.Match import *
 
-API_KEYS = ['RGAPI-aa6932d1-9e5b-4af9-9b7c-cdbc5abbb1cb','RGAPI-a086aa60-b73e-4acb-9ded-c6c136700130','RGAPI-735b78eb-6be9-41fd-afe9-2bce951954e1']
+API_KEYS = ['RGAPI-349d44c3-c045-48ce-b771-92ae69bd882a']
 API_INDEX = 0
-API_JUMP = 2
+API_JUMP = 40
 def incrementApiIndex():
     global REQUEST_CPT
     global API_INDEX
     print('changing API key')
     API_INDEX += 1
-    if API_INDEX == 3:
+    if API_INDEX == 1:
         API_INDEX = 0
+    print(API_KEYS[API_INDEX])
 
 def findUuidBySummonerName(SummonerName: str):
     url = f'https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{SummonerName}?api_key={API_KEYS[API_INDEX]}'
@@ -35,9 +36,12 @@ def getMatchInfoByMatchId(puuid:str, matchId:int):
         url = f'https://europe.api.riotgames.com/lol/match/v5/matches/{matchId}?api_key={API_KEYS[API_INDEX]}'
         response = requests.request("GET", url)
         data = json.loads(response.text)
+        gameMode = data['info']['gameMode']
     except Exception as e:
         # Gérer toutes les autres exceptions
         print(f"Une erreur est survenue : {e}")
+    if gameMode != 'CLASSIC':
+        return None
     participants = data['info']['participants']
     teams = data['info']['teams']
     teamId = 0
@@ -78,9 +82,11 @@ def getMatchsInformation(summonerName, nbMatch):
                 return matchList
             print(f'{i} - Request for match: {match} ({API_KEYS[API_INDEX]})')
             match = getMatchInfoByMatchId(myPuuid, match)
-            matchList.append(match)
-            nbGetMatch += 1
+            if match != None:
+                matchList.append(match)
+                nbGetMatch += 1
             i += 1 
+    return matchList
         
 
     

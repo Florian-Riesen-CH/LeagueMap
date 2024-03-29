@@ -6,6 +6,7 @@ import json
 app = FastAPI()
 #Liste des domaines autorisés, '*' signifie tout domaine
 origins = [
+    "http://localhost:4200",
     "*",
 ]
 
@@ -30,5 +31,5 @@ def getDatas(sumonnerName:str, nbgame:int):
     return dataset
 
 
-#ßuvicorn main:app --reloadget
-#getDatas('Flodel11',1)
+#vicorn main:app --reload
+#getDatas('Flodel11',5)
