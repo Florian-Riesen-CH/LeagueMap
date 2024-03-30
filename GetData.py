@@ -5,7 +5,7 @@ import json
 from Object.Match import *
 from Object.exceptions import SummonerNameError
 
-API_KEYS = ['RGAPI-349d44c3-c045-48ce-b771-92ae69bd882a']
+API_KEYS = ['RGAPI-2ec8176c-5fda-47b0-9103-cad7a73319f7']
 API_INDEX = 0
 API_JUMP = 40
 def incrementApiIndex():
