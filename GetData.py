@@ -3,6 +3,7 @@ import requests
 import json
 
 from Object.Match import *
+from Object.exceptions import SummonerNameError
 
 API_KEYS = ['RGAPI-349d44c3-c045-48ce-b771-92ae69bd882a']
 API_INDEX = 0
@@ -18,10 +19,14 @@ def incrementApiIndex():
 
 def findUuidBySummonerName(SummonerName: str):
     url = f'https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{SummonerName}?api_key={API_KEYS[API_INDEX]}'
-        
-    response = requests.request("GET", url)
-    data = json.loads(response.text)
-    return data['puuid']
+    
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        return data['puuid']
+    else:
+        # Lever une SummonerNameError plutôt qu'une Exception générique
+        raise SummonerNameError(SummonerName, f"Erreur HTTP {response.status_code} lors de la récupération du summoner.")
 
 def getMatchHistoryByPuuid(Puuid:str, idFrom: int, count: int):
     if count > 100:

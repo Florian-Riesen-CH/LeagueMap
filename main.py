@@ -1,6 +1,6 @@
 from GetData import *
 from Object.dataSet import *
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import json
 app = FastAPI()
@@ -21,7 +21,12 @@ app.add_middleware(
 
 @app.get("/getDatas")
 def getDatas(sumonnerName:str, nbgame:int):
-    matchList: List[Match] = getMatchsInformation(sumonnerName, nbgame)
+    try:
+        matchList: List[Match] = getMatchsInformation(sumonnerName, nbgame)
+    except SummonerNameError as e:
+        # Vous pouvez retourner un statut d'erreur HTTP spécifique avec un message
+        raise HTTPException(status_code=404, detail=f"Erreur : {e}")
+    
     dataset: DataSet = DataSet()
     for match in matchList:
         for opponent in match.team_Opponent:
