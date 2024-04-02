@@ -38,3 +38,4 @@ def getDatas(sumonnerName:str, nbgame:int):
 
 #vicorn main:app --reload
 #getDatas('Flodel11',5)
+#pip install requests && pip install fastapi && pip install uvicorn && export PATH=$PATH:/opt/render/.local/bin && uvicorn main:app --host 0.0.0.0 --port $PORT;
