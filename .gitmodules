@@ -1,0 +1,3 @@
+[submodule "Front-End/WebApp"]
+	path = Front-End/WebApp
+	url = https://exemple.com/chemin/vers/le/sous-module.git
